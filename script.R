@@ -1,4 +1,4 @@
-#Piotroski in R
+#Richard G. Sloan Algorithm
 d <- read.csv(commandArgs(trailingOnly = FALSE)[6],sep =',',stringsAsFactors=FALSE)
 useful_info <- d[c(3,4),-c(1)]
 d <- d[-(0:4),]
@@ -16,9 +16,12 @@ d['Accrual'] <- d['cCurrent assets']-d['pCurrent assets']+d['cCorporate tax']-d[
 for(i in c('cAdjusted Closing Price ','fAdjusted Closing Price ')){d[,i]<-replace(d[,i],d[,i]==0,NA)}
 d <- d[complete.cases(d),]
 sorted_d <- d[order(d[,'Accrual']),]
-bottom_decile <-sorted_d[1:(as.integer(nrow(sorted_d)/10)),]
-top_decile <-sorted_d[(as.integer(9*nrow(sorted_d)/10)):nrow(sorted_d),]
+bottom_decile <-sorted_d[1:(floor(nrow(sorted_d)/10)),]
+top_decile <-sorted_d[-c(1:(ceiling(9*nrow(sorted_d)/10))),]
 top_returns <- sum((top_decile[,'fAdjusted Closing Price ']-top_decile[,'cAdjusted Closing Price '])/top_decile[,'cAdjusted Closing Price '])/nrow(top_decile)
 bottom_returns <- sum((-bottom_decile[,'fAdjusted Closing Price ']+bottom_decile[,'cAdjusted Closing Price '])/bottom_decile[,'cAdjusted Closing Price '])/nrow(bottom_decile)
 returns <- -(top_returns+bottom_returns)
 print(returns*100)
+print(length(1:(floor(nrow(sorted_d)/10))))
+print(nrow(sorted_d[-c(1:(ceiling(9*nrow(sorted_d)/10))),]))
+write.csv(file = "2014_results.csv",x = sorted_d)
