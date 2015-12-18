@@ -16,9 +16,9 @@ d['Accrual'] <- d['cCurrent assets']-d['pCurrent assets']+d['cCorporate tax']-d[
 for(i in c('cAdjusted Closing Price ','fAdjusted Closing Price ')){d[,i]<-replace(d[,i],d[,i]==0,NA)}
 d <- d[complete.cases(d),]
 sorted_d <- d[order(d[,'Accrual']),]
-bottom_decile <-sorted_d[1:(nrow(sorted_d)/10),]
-top_decile <-sorted_d[1:(9*nrow(sorted_d)/10),]
+bottom_decile <-sorted_d[1:(as.integer(nrow(sorted_d)/10)),]
+top_decile <-sorted_d[(as.integer(9*nrow(sorted_d)/10)):nrow(sorted_d),]
 top_returns <- sum((top_decile[,'fAdjusted Closing Price ']-top_decile[,'cAdjusted Closing Price '])/top_decile[,'cAdjusted Closing Price '])/nrow(top_decile)
 bottom_returns <- sum((-bottom_decile[,'fAdjusted Closing Price ']+bottom_decile[,'cAdjusted Closing Price '])/bottom_decile[,'cAdjusted Closing Price '])/nrow(bottom_decile)
-returns <- top_returns+bottom_returns
+returns <- -(top_returns+bottom_returns)
 print(returns*100)
