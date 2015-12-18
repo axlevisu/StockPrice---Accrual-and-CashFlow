@@ -22,6 +22,4 @@ top_returns <- sum((top_decile[,'fAdjusted Closing Price ']-top_decile[,'cAdjust
 bottom_returns <- sum((-bottom_decile[,'fAdjusted Closing Price ']+bottom_decile[,'cAdjusted Closing Price '])/bottom_decile[,'cAdjusted Closing Price '])/nrow(bottom_decile)
 returns <- -(top_returns+bottom_returns)
 print(returns*100)
-print(length(1:(floor(nrow(sorted_d)/10))))
-print(nrow(sorted_d[-c(1:(ceiling(9*nrow(sorted_d)/10))),]))
-write.csv(file = "2014_results.csv",x = sorted_d)
+write.csv(file = paste(substr(commandArgs(trailingOnly = FALSE)[6],1,4),"results.csv",sep="_"),x = sorted_d)
